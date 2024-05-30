@@ -17,6 +17,12 @@ class bm25:
     def tf(self):
         pass
     
-    @abstractmethod
-    def get_top_n(self):
-        pass
+    def score(self, query:list, doc:list) -> float:
+        return sum([self.idf(term)*self.tf(term, doc) for term in query])
+
+    def get_top_n(self, query:str, n= 5)-> dict:
+        '''Retrive top n document from corpus'''    
+        toknised_query= query.split()
+        scores= {doc: self.score(toknised_query, doc) for doc in self.corpus}
+        sorted_scores= {k: v for k, v in sorted(scores.items(), key=lambda item: item[1])[:n]}
+        return sorted_scores
