@@ -8,10 +8,10 @@ class robertson(bm25):
         self.b = b
         self.k = k
 
-    def idf(self, term) -> float:
+    def idf(self, term: str) -> float:
         """Inverse document frequency"""
 
-        dft = len([doc for doc in self.corpus if term in doc])
+        dft = self.term_doc_freq[term]
         return math.log((self.number_document - dft + 0.5) / (dft + 0.5))
 
     def tf(self, term: str, doc: list) -> float:

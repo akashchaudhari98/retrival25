@@ -1,4 +1,6 @@
 from abc import abstractmethod
+import time
+from collections import defaultdict, Counter
 
 
 class bm25:
@@ -12,6 +14,14 @@ class bm25:
 
         len_of_doc = [len(doc) for doc in self.corpus]
         self.avg_tok_doc = sum(len_of_doc) / self.number_document
+
+        self.term_doc_freq = defaultdict(int)
+        self.doc_term_freq = []
+        for doc in self.corpus:
+            term_freq = Counter(doc)
+            self.doc_term_freq.append(term_freq)
+            for term in term_freq:
+                self.term_doc_freq[term] += 1
 
     @abstractmethod
     def idf(self):
@@ -28,7 +38,7 @@ class bm25:
         """Retrive top n document from corpus"""
         toknised_query = query.split()
         scores = [[doc, self.score(toknised_query, doc)] for doc in self.corpus]
-        sorted_scores = {
-            k: v for k, v in sorted(scores.items(), key=lambda item: item[1])[:n]
-        }
+        sorted_scores = [
+            [k, v] for k, v in sorted(scores, key=lambda item: item[1])[:n]
+        ]
         return sorted_scores

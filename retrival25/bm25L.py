@@ -11,7 +11,7 @@ class bm25L(bm25):
     def idf(self, term) -> float:
         """Inverse document frequency"""
 
-        dft = len([doc for doc in self.corpus if term in doc])
+        dft = self.term_doc_freq[term]
         return math.log((self.number_document + 1) / (dft + 0.5))
 
     def tf(self, term: str, doc: list) -> float:
