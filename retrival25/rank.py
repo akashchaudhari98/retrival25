@@ -7,7 +7,7 @@ VARIANTS = {"robertson": robertson, "atire_bm25": atire_bm25, "bm25_L": bm25L}
 
 class ranker:
     def __init__(
-        self, corpus: list, k: float, b: float, type: str = "robertson"
+        self, corpus: list, k: float, b: float, epsilon: float,  type: str = "robertson"
     ) -> None:
         self.bm25_obj = VARIANTS[type](document_corpus=corpus, b=b, k=k)
 
