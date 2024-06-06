@@ -1,23 +1,26 @@
 from abc import abstractmethod
-import time
+from tok import word_tokenize
 from collections import defaultdict, Counter
+import copy
 
 
 class bm25:
 
     def __init__(self, document_corpus: list) -> None:
-        self.corpus = [doc.split() for doc in document_corpus]
-        self._initalise_variables__()
+        self.corpus = dict(enumerate(document_corpus))
+        self.corpus_copy = copy.deepcopy(self.corpus)
+        self.corpus = {i: word_tokenize(doc) for i, doc in self.corpus.items()}
+        self.__initalise_variables__()
 
-    def _initalise_variables__(self):
-        self.number_document = len(self.corpus)
+    def __initalise_variables__(self):
+        self.number_document = max(self.corpus.keys()) + 1
 
-        len_of_doc = [len(doc) for doc in self.corpus]
+        len_of_doc = [len(doc) for doc in self.corpus.values()]
         self.avg_tok_doc = sum(len_of_doc) / self.number_document
 
-        self.term_doc_freq = defaultdict(int)
+        self.term_doc_freq = defaultdict(lambda: 1)
         self.doc_term_freq = []
-        for doc in self.corpus:
+        for doc in self.corpus.values():
             term_freq = Counter(doc)
             self.doc_term_freq.append(term_freq)
             for term in term_freq:
@@ -36,9 +39,13 @@ class bm25:
 
     def get_top_n(self, query: str, n=5) -> dict:
         """Retrive top n document from corpus"""
-        toknised_query = query.split()
-        scores = [[doc, self.score(toknised_query, doc)] for doc in self.corpus]
+        toknised_query = word_tokenize(query)
+        scores = {
+            id: [doc, self.score(toknised_query, doc)]
+            for id, doc in self.corpus.items()
+        }
         sorted_scores = [
-            [k, v] for k, v in sorted(scores, key=lambda item: item[1])[:n]
+            [self.corpus_copy[id], v[1]]
+            for id, v in sorted(scores.items(), key=lambda item: item[1][1], reverse=True)[:n]
         ]
         return sorted_scores
