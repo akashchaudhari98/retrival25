@@ -2,6 +2,7 @@ from abc import abstractmethod
 from tok import word_tokenize
 from collections import defaultdict, Counter
 import copy
+import math
 
 
 class bm25:
@@ -19,12 +20,17 @@ class bm25:
         self.avg_tok_doc = sum(len_of_doc) / self.number_document
 
         self.term_doc_freq = defaultdict(lambda: 1)
-        self.doc_term_freq = []
+        # self.doc_term_freq = []
         for doc in self.corpus.values():
             term_freq = Counter(doc)
-            self.doc_term_freq.append(term_freq)
+            # self.doc_term_freq.append(term_freq)
             for term in term_freq:
                 self.term_doc_freq[term] += 1
+        self.term_doc_freq = {
+            term: math.log(self.number_document / freq)
+            for term, freq in self.term_doc_freq.items()
+        }
+        self.term_doc_freq = defaultdict(lambda: 1, self.term_doc_freq)
 
     @abstractmethod
     def idf(self):
@@ -46,6 +52,8 @@ class bm25:
         }
         sorted_scores = [
             [self.corpus_copy[id], v[1]]
-            for id, v in sorted(scores.items(), key=lambda item: item[1][1], reverse=True)[:n]
+            for id, v in sorted(
+                scores.items(), key=lambda item: item[1][1], reverse=True
+            )[:n]
         ]
         return sorted_scores

@@ -17,9 +17,9 @@ class atire_bm25(bm25):
 
     def idf(self, term) -> float:
         """Inverse document frequency"""
-        dft = self.term_doc_freq[term]
+        #dft = self.term_doc_freq[term]
 
-        return math.log(self.number_document / dft)
+        return self.term_doc_freq[term]
 
     def tf(self, term: str, doc: list) -> float:
         """Term frequency"""
