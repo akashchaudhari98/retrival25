@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from tok import word_tokenize
-from collections import defaultdict, Counter
+from collections import defaultdict
 import copy
 import math
 
@@ -19,12 +19,10 @@ class bm25:
         len_of_doc = [len(doc) for doc in self.corpus.values()]
         self.avg_tok_doc = sum(len_of_doc) / self.number_document
 
-        self.term_doc_freq = defaultdict(lambda: 1)
-        # self.doc_term_freq = []
+        self.term_doc_freq = defaultdict(int)
         for doc in self.corpus.values():
-            term_freq = Counter(doc)
-            # self.doc_term_freq.append(term_freq)
-            for term in term_freq:
+            # term_freq = Counter(doc)
+            for term in set(doc):
                 self.term_doc_freq[term] += 1
         self.term_doc_freq = {
             term: math.log(self.number_document / freq)
