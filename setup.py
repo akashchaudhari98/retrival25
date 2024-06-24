@@ -8,7 +8,9 @@ setup(
         # List your project's dependencies here.
         # e.g., 'requests', 'numpy'
         'numpy',
-        'pandas'
+        'pandas',
+        'scipy',
+        'tok'
     ],
     author='Akash Chaudhari',
     author_email='akashchaudhari726@gmail.com',
