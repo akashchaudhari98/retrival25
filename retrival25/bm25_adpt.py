@@ -19,18 +19,39 @@ class bm25_adbt(bm25):
         self.b = b
         self.k = k
         self.tokens = set(chain.from_iterable(self.corpus.values()))
+        self._precompute_ctd()
         self._calc_ki()
+
+    def _precompute_ctd(self):
+        self.term_ctd = defaultdict(lambda: defaultdict(int))
+        for doc_id, doc in self.corpus.items():
+            for term in doc:
+                self.term_ctd[term][doc_id] = round(self._ctd(term, doc))
 
     def _calc_ki(self):
         self.ki = defaultdict(lambda: 1)
         for token in self.tokens:
             ig = self._cal_info_gain(token)
-            ig_1 = self._ig(token, 1)
-            k_dash = minimize(self._k_dash, x0=ig_1, args=(ig_1, np.arange(len(ig))))
+
+            k_dash = minimize(
+                self._k_dash,
+                x0=[self.k for _ in range(len(ig))],
+                args=(
+                    list(ig.values()),
+                    [ig[1] for _ in range(len(ig))],
+                    list(ig.keys()),
+                ),
+            )
             self.ki[token] = k_dash.fun
 
-    def _k_dash(self, ig, ig_1, t):
-        return np.sum(((ig / ig_1) - ((self.k + 1) * t) / (self.k + t)) ** 2)
+    def _k_dash(self, k, ig, ig_1, t):
+        return np.sum(
+            (
+                np.array([ig[i] for i in t]) / ig_1
+                - ((k + 1) * np.array(t)) / (k + np.array(t))
+            )
+            ** 2
+        )
 
     def _cal_info_gain(self, term):
         previous_val, ig_val, t = 0, 0, 0
@@ -59,13 +80,7 @@ class bm25_adbt(bm25):
         if t == 1:
             return self.term_doc_freq[term]
         if t > 1:
-            return len(
-                [
-                    docs
-                    for docs in self.corpus.values()
-                    if term in docs and round(self._ctd(term, docs)) > t
-                ]
-            )
+            return sum(1 for _, val in self.term_ctd[term].items() if val > 1)
 
     def idf(self, term) -> float:
         """Inverse document frequency"""
@@ -74,10 +89,7 @@ class bm25_adbt(bm25):
 
     def tf(self, term: str, doc: list) -> float:
         """Term frequency"""
-        try:
-            return ((self.ki[term] + 1) * doc.count(term)) / (
-                self.ki[term] * ((1 - self.b) + self.b * ((len(doc) / self.avg_tok_doc)))
-                + doc.count(term)
-            )
-        except Exception as ex:
-            print(ex)
+        return ((self.ki[term] + 1) * doc.count(term)) / (
+            self.ki[term] * ((1 - self.b) + self.b * ((len(doc) / self.avg_tok_doc)))
+            + doc.count(term)
+        )
