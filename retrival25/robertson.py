@@ -4,7 +4,7 @@ from retrival25.base import bm25
 
 class robertson(bm25):
     def __init__(
-        self, document_corpus: list, b: float = 0.75, k: float = 1.2, epislon: float = 1
+        self, document_corpus: list, b: float = 0.75, k: float = 1.2, epsilon: float = 1
     ) -> None:
         super().__init__(document_corpus)
         self.b = b
