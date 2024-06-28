@@ -17,7 +17,9 @@ class ranker:
     def __init__(
         self, corpus: list, k: float, b: float, epsilon: float, type: str = "robertson"
     ) -> None:
-        self.bm25_obj = VARIANTS[type](document_corpus=corpus, b=b, k=k)
+        self.bm25_obj = VARIANTS[type](
+            document_corpus=corpus, b=b, k=k, epsilon=epsilon
+        )
 
     def get_top_n(self, query: str, n=5):
         return self.bm25_obj.get_top_n(query, n)
