@@ -11,6 +11,13 @@
 <i>One stop solution for all BM25 needs</i>
 </div>
 
+## Installation
+You can install `retrival25` with pip:
+
+```bash
+pip install retrival25
+```
+
 ## Quick Start
 Here is a simple example of how to use `retrival25`:
 
