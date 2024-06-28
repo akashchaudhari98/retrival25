@@ -14,6 +14,10 @@ class atire_bm25(bm25):
         super().__init__(document_corpus)
         self.b = b
         self.k = k
+        self.term_doc_freq = {
+            term: math.log(self.number_document / freq)
+            for term, freq in self.term_doc_freq.items()
+        }
 
     def idf(self, term) -> float:
         """Inverse document frequency"""

@@ -15,7 +15,12 @@ VARIANTS = {
 
 class ranker:
     def __init__(
-        self, corpus: list, k: float, b: float, epsilon: float, type: str = "robertson"
+        self,
+        corpus: list,
+        k: float = 1.2,
+        b: float = 0.75,
+        epsilon: float = 1,
+        type: str = "robertson",
     ) -> None:
         self.bm25_obj = VARIANTS[type](
             document_corpus=corpus, b=b, k=k, epsilon=epsilon
