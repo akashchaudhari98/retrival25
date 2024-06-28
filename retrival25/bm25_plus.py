@@ -5,7 +5,7 @@ from retrival25.base import bm25
 
 class bm25_plus(bm25):
     def __init__(
-        self, document_corpus: list, b: float, k: float, epsilon: float
+        self, document_corpus: list, b: float = 0.75, k: float = 1.2, epsilon: float = 1
     ) -> None:
         super().__init__(document_corpus)
         self.b = b

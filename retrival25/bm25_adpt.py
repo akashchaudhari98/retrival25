@@ -7,7 +7,9 @@ from collections import defaultdict
 
 
 class bm25_adbt(bm25):
-    def __init__(self, document_corpus: list, b: int, k: int) -> None:
+    def __init__(
+        self, document_corpus: list, b: float = 0.75, k: float = 1.2, epsilon: float = 1
+    ) -> None:
         """_summary_
 
         Args:
