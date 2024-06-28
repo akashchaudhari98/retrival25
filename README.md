@@ -1,8 +1,8 @@
 <div align="center">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Documentation Status](https://readthedocs.org/projects/capreolus/badge/?version=latest)](https://capreolus.readthedocs.io/?badge=latest)
-[![PyPI version fury.io](https://badge.fury.io/py/capreolus.svg)](https://pypi.python.org/pypi/capreolus/)
+[![python](https://img.shields.io/badge/Python-3.9-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![PyPI version fury.io](https://img.shields.io/pypi/v/retrival25.svg)](https://pypi.org/project/retrival25/0.1.0/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) 
 
 
