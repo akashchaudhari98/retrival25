@@ -1,4 +1,5 @@
 import math
+from collections import defaultdict
 from retrival25.base import bm25
 
 
@@ -10,6 +11,12 @@ class bm25_plus(bm25):
         self.b = b
         self.k = k
         self.epsilon = epsilon
+
+        self.term_doc_freq = {
+            term: math.log((self.number_document + 1) / freq)
+            for term, freq in self.term_doc_freq.items()
+        }
+        self.term_doc_freq = defaultdict(int)
 
     def idf(self, term) -> float:
         """Inverse document frequency"""

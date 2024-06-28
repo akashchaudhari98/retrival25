@@ -24,11 +24,11 @@ class bm25:
             # term_freq = Counter(doc)
             for term in set(doc):
                 self.term_doc_freq[term] += 1
-        self.term_doc_freq = {
-            term: math.log(self.number_document / freq)
-            for term, freq in self.term_doc_freq.items()
-        }
-        self.term_doc_freq = defaultdict(lambda: 1, self.term_doc_freq)
+        # self.term_doc_freq = {
+        #     term: math.log(self.number_document / freq)
+        #     for term, freq in self.term_doc_freq.items()
+        # }
+        # self.term_doc_freq = defaultdict(lambda: 1, self.term_doc_freq)
 
     @abstractmethod
     def idf(self):
